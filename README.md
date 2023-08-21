@@ -22,7 +22,8 @@ Requires the use of clasp and standard structure of `.clasp.json` files for each
 │   ├── appsscript.json
 ```
 
-Usage: Run by direct reference to file, or include in rc / profile file
+## Usage
+Run by direct reference to file, or include in rc / profile file
 
 _Example:_
 - File Location: `~/.my_funcs/clasp_helpers.sh`
