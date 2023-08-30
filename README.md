@@ -34,3 +34,10 @@ _Example:_
   # Load functions into shell
   source ~/.my_funcs/clasp_helpers.sh
   ```
+
+## Example Workflow
+1. Developer makes fix/enhancement to `dev` Apps Script project
+2. Developer runs `clasp_pull dev` to pull latest changes from dev script
+3. Developer commits changes to working branch, pushes to remote repository, completes code review and merges to main branch
+4. Developer checks out main branch and pulls latest changes
+5. Developer runs `clasp_promote prod` to push reviewed, merged changes to production Apps Script project
