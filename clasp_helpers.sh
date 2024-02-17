@@ -13,6 +13,7 @@ clasp_pull () {
     # Validate parameter
     if [ "$#" -ne 1 ]; then
         echo please provide 1 parameter: environment
+        return 0
     fi
 
     # Convert environemnt argument to lowercase
@@ -33,11 +34,12 @@ clasp_pull () {
 }
 
 # Update clasp file and deploy for specified environment
-clasp_promote () {
+clasp_push () {
 
     # Validate parameter
     if [ "$#" -ne 1 ]; then
         echo please provide 1 parameter: environment
+        return 0
     fi
 
     # Convert environemnt argument to lowercase
@@ -52,6 +54,31 @@ clasp_promote () {
         echo completed $env push
     else 
         echo failed to push $env code
+    fi
+
+}
+
+# Update clasp and appsscript file for specified environment
+clasp_env () {
+
+    # Validate parameter
+    if [ "$#" -ne 1 ]; then
+        echo please provide 1 parameter: environment
+        return 0
+    fi
+
+    # Convert environemnt argument to lowercase
+    env=`echo $1 | awk '{ print tolower($1) }'`
+
+    # Update clasp file
+    echo updating files for $env script
+    clasp_success=$(_update_clasp_json $env)
+    appsscript_success=$(_update_appsscript_json $env)
+    if [ clasp_success ] && [ appsscript_success ]; then
+        # Echo success
+        echo completed $env update
+    else 
+        echo failed to update $env files
     fi
 
 }
@@ -71,4 +98,19 @@ _update_clasp_json () {
         echo no clasp/."$1".clasp.json found
         echo false
     fi
+}
+
+# $1 - Pass argument for code env matching appsscript file
+_update_appsscript_json () {
+    
+    # Check if appsscript file exists in directory
+    if [ -f clasp/"$1".appsscript.json ]; then
+        echo updating appsscript.json file using clasp/"$1".appsscript.json
+        # Parse Script ID from environment clasp file
+        cp clasp/"$1".appsscript.json appsscript.json
+        echo true
+    else
+        echo no clasp/"$1".appsscript.json found
+        echo false
+    fi 
 }

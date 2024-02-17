@@ -10,7 +10,7 @@ These scripts help automate replication of code across multiple projects.
 _NOTE:_ These scripts only replicate source code for the project. Authorization, triggers, and properties must be replicated manually.
 
 ## Setup
-Requires the use of clasp and standard structure of `.clasp.json` files for each script version.
+Requires the use of clasp and standard structure of `.clasp.json` files for each script version. Additionally supports multiple `appsscript.json` files to support different dependencies / libraries across environments.
 
 ```
 ├── src/
@@ -18,6 +18,9 @@ Requires the use of clasp and standard structure of `.clasp.json` files for each
 │   │   ├── .dev.clasp.json
 │   │   ├── .prod.clasp.json
 │   │   ├── .*.clasp.json
+│   │   ├── dev.appsscript.json
+│   │   ├── prod.appsscript.json
+│   │   ├── *.appsscript.json
 │   ├── Code.js
 │   ├── appsscript.json
 ```
@@ -35,9 +38,14 @@ _Example:_
   source ~/.my_funcs/clasp_helpers.sh
   ```
 
+## Available Functions
+- `clasp_pull [env]` - updates environment files and runs `clasp pull`
+- `clasp_push [env]` - updates environment files and runs `clasp push`
+- `clasp_env [env]` - updates environment files only
+
 ## Example Workflow
 1. Developer makes fix/enhancement to `dev` Apps Script project
 2. Developer runs `clasp_pull dev` to pull latest changes from dev script
 3. Developer commits changes to working branch, pushes to remote repository, completes code review and merges to main branch
 4. Developer checks out main branch and pulls latest changes
-5. Developer runs `clasp_promote prod` to push reviewed, merged changes to `prod` Apps Script project
+5. Developer runs `clasp_push prod` to push reviewed, merged changes to `prod` Apps Script project
