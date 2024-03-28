@@ -7,6 +7,29 @@
 # - jq installed
 # - folder structure with clasp directory and .{env}.clasp.json files
 
+# Update credentials file from userprofile folder
+clasp_profile () {
+
+    # Validate parameter
+    if [ "$#" -ne 1 ]; then
+        echo please provide 1 parameter: profile
+        return 0
+    fi
+
+    profile=`echo $1 | awk '{ print tolower($1) }'`
+
+    # Check if clasp file exists in directory
+    clasprc=~/.clasprc/"$1".clasprc.json
+    if [ -f $clasprc ]; then
+        echo updating .clasprc.json file using .clasprc/"$1".clasprc.json
+        # Update clasprc file based on environment
+        cp $clasprc ~/.clasprc.json
+    else
+        echo no .clasprc/"$1".clasprc.json found
+        echo false
+    fi
+}
+
 # Update clasp to dev ID and pull code
 clasp_pull () {
     
@@ -30,7 +53,6 @@ clasp_pull () {
     else 
         echo failed to pull $env code
     fi
-
 }
 
 # Update clasp file and deploy for specified environment
@@ -55,7 +77,6 @@ clasp_push () {
     else 
         echo failed to push $env code
     fi
-
 }
 
 # Update clasp and appsscript file for specified environment
@@ -80,7 +101,6 @@ clasp_env () {
     else 
         echo failed to update $env files
     fi
-
 }
 
 # $1 - Pass argument for code env matching clasp file
@@ -106,7 +126,7 @@ _update_appsscript_json () {
     # Check if appsscript file exists in directory
     if [ -f clasp/"$1".appsscript.json ]; then
         echo updating appsscript.json file using clasp/"$1".appsscript.json
-        # Parse Script ID from environment clasp file
+        # Update appsscript file based on environment
         cp clasp/"$1".appsscript.json appsscript.json
         echo true
     else
